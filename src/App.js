@@ -1,7 +1,7 @@
 import React from 'react';
 import { getNewsArticles } from './api';
-import { Container, Header } from 'semantic-ui-react';
 import ArticleList from './components/articlesList';
+import { Container, Header } from 'semantic-ui-react';
 
 class App extends React.Component {
   state = {
@@ -18,16 +18,14 @@ class App extends React.Component {
     }
   }
 
-  // getNewsArticles();
   render() {
     const { articles, apiError } = this.state;
-
     return (
       <Container>
         <Header as="h2" style={{ textAlign: "center", margin: 20 }}>
           Tech Articles
         </Header>
-        {articles.length>0 && <ArticleList articles={articles} />}
+        {articles.length > 0 && <ArticleList articles={articles} />}
         {apiError && <p>Could Not fetch any articles. Please try again.</p>}
       </Container>
     );
