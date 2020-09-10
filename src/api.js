@@ -11,7 +11,7 @@ export const getNewsArticles = async () => {
 
 export const getTopicArticles = async topic => {
 	const response = await fetch(
-		`https://newsapi.org/v2/everything?q=${topic}&sortBy=publishedAt&apiKey=${NEWS_API_KEY}`
+		`https://newsapi.org/v2/everything?q=${topic}&language=en&sortBy=publishedAt&apiKey=${NEWS_API_KEY}`
 	);
 	const json = await response.json();
 	return json;

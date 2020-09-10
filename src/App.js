@@ -1,32 +1,70 @@
 import React from 'react';
-import { getNewsArticles } from './api';
+import { getTopicArticles } from './api';
 import ArticleList from './components/articlesList';
+import SearchBar from './components/searchBar';
 import { Container, Header } from 'semantic-ui-react';
+
 
 class App extends React.Component {
   state = {
     articles: [],
-    apiError: "",
+    searchTopic: "",
+    totalResults: "",
+    loading: false,
+    apiError: ""
   };
 
-  async componentDidMount() {
+  searchForTopic = async topic => {
     try {
-      const response = await getNewsArticles();
-      this.setState({ articles: response.articles })
+      this.setState({ loading: true });
+      const response = await getTopicArticles(topic);
+      this.setState({
+        articles: response.articles,
+        searchTopic: topic,
+        totalResults: response.totalResults
+      });
     } catch (error) {
       this.setState({ apiError: "Could not find any articles" });
     }
-  }
+    this.setState({ loading: false });
+  };
+
+  // async componentDidMount() {
+  //   try {
+  //     const response = await getNewsArticles();
+  //     this.setState({ articles: response.articles })
+  //   } catch (error) {
+  //     this.setState({ apiError: "Could not find any articles" });
+  //   }
+  // }
 
   render() {
-    const { articles, apiError } = this.state;
+    const {
+      articles,
+      apiError,
+      loading,
+      searchTopic,
+      totalResults
+    } = this.state;
     return (
       <Container>
         <Header as="h2" style={{ textAlign: "center", margin: 20 }}>
-          Tech Articles
+          Search for a topic
         </Header>
+        <SearchBar searchForTopic={this.searchForTopic} />
+        <p style={{ textAlign: "center" }}>
+          Powered by <a href="https://newsapi.org/">NewsAPI.org</a>
+        </p>
+        {loading && (
+          <p style={{ textAlign: "center" }}>Searching for articles...</p>
+        )}
+        {articles.length > 0 && (
+          <Header as="h4" style={{ textAlign: "center", margin: 20 }}>
+            Found {totalResults} articles on "{searchTopic}"
+          </Header>
+        )}
         {articles.length > 0 && <ArticleList articles={articles} />}
-        {apiError && <p>Could Not fetch any articles. Please try again.</p>}
+        {apiError && <p>Could not fetch any articles. Please try again.</p>}
       </Container>
     );
   }

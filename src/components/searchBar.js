@@ -4,7 +4,16 @@ import { Button, Form } from "semantic-ui-react";
 class SearchBar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.State = { SearchTopic: "" };
+		this.state = { SearchTopic: "" };
+	}
+
+	handleChange = event => {
+		this.setState({ searchTopic: event.target.value });
+	};
+
+	handleSubmit = event => {
+		event.preventDefault();
+		this.props.searchForTopic(this.state.searchTopic);
 	}
 
 	render() {
